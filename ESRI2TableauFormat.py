@@ -4,15 +4,27 @@ import sys
 
 #def convertESRI2TableauFormat( p_inputfile, p_outputfile):
 
-l_outfileName = 'c:/ESRI_suburb_tab_format.csv'  # make changes here..
-l_ESRIFileName ='c:/ESRI_suburb.csv'             # make changes here..
+if len(sys.argv) !=  3:
+  print "usage: ESRI2TableauFormat INPUTCSV OUTPUTCVC"
+  sys.exit(1)
+
+l_ESRIFileName = sys.argv[1]
+if l_ESRIFileName.find(".csv") == -1:
+  print "INPUTFile must be a CSV"
+  sys.exit(1)
+
+
+l_outfileName = sys.argv[2]
+if l_outfileName.find(".csv") == -1:
+  print "OUTPUTFile must be a CSV"
+  sys.exit(1)
+
 
 rdx=0
 csv.field_size_limit(sys.maxsize)
-outfile = open( l_outfileName, 'w', newline='')
+outfile = open( l_outfileName, 'wb')
 csvWriter = csv.writer( outfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
-with open( l_ESRIFileName, 'r') as csvfile:
+with open( l_ESRIFileName, 'rb') as csvfile:
 
  csvR = csv.reader( csvfile, delimiter=',', quotechar='"')
  for row in csvR:
@@ -67,7 +79,7 @@ with open( l_ESRIFileName, 'r') as csvfile:
                            rowValues[6] = resArr[0] #long
                            rowValues[7] = polyx
 
-                           if( (pointx ==1) | (pointx == len(LatLonStrArr))| (len(LatLonStrArr)&lt;=10)| (pointx % 10 == 0) ):
+                           if( (pointx ==1) | (pointx == len(LatLonStrArr))| (len(LatLonStrArr)<=10)| (pointx % 10 == 0) ):
                               pointxx += 1
                               rowValues[8] = pointxx
                               csvWriter.writerow( rowValues);
